@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Star, StarHalf, StarOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -14,43 +13,34 @@ const ReviewsSection: React.FC = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch reviews from Supabase
   const { data: reviews = [], isLoading } = useQuery({
     queryKey: ['reviews'],
     queryFn: getReviews
   });
 
-  // Mutation for submitting reviews
   const submitReviewMutation = useMutation({
     mutationFn: submitReview,
     onSuccess: () => {
-      // Reset form
       setName("");
       setReviewText("");
       setRating(5);
-      
-      // Show success message
       toast({
         title: "Thank you for your review!",
         description: "Your feedback has been submitted and will be displayed after approval.",
       });
-      
-      // Invalidate query to refresh data
       queryClient.invalidateQueries({ queryKey: ['reviews'] });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         title: "Error",
         description: "There was a problem submitting your review. Please try again.",
         variant: "destructive"
       });
-      console.error("Error submitting review:", error);
     }
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!name || !reviewText) {
       toast({
         title: "Error",
@@ -59,19 +49,15 @@ const ReviewsSection: React.FC = () => {
       });
       return;
     }
-    
-    submitReviewMutation.mutate({
-      name,
-      review: reviewText,
-      rating
-    });
+
+    submitReviewMutation.mutate({ name, review: reviewText, rating });
   };
 
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-    
+
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
         stars.push(<Star key={i} size={16} className="text-neon" fill="#c2ff00" />);
@@ -81,7 +67,6 @@ const ReviewsSection: React.FC = () => {
         stars.push(<StarOff key={i} size={16} className="text-gray-500" />);
       }
     }
-    
     return stars;
   };
 
@@ -100,9 +85,7 @@ const ReviewsSection: React.FC = () => {
           >
             <Star
               size={24}
-              className={`${
-                (hoveredRating || rating) >= value ? "text-neon" : "text-gray-500"
-              }`}
+              className={`${(hoveredRating || rating) >= value ? "text-neon" : "text-gray-500"}`}
               fill={(hoveredRating || rating) >= value ? "#c2ff00" : "none"}
             />
           </button>
@@ -113,7 +96,6 @@ const ReviewsSection: React.FC = () => {
 
   return (
     <section id="reviews" className="section-padding bg-gradient-to-b from-black to-jet relative overflow-hidden">
-      {/* 3D Background Elements - Animated Particles */}
       <div className="absolute inset-0 z-0 opacity-20">
         <canvas id="reviewsParticles" className="w-full h-full"></canvas>
       </div>
@@ -158,14 +140,14 @@ const ReviewsSection: React.FC = () => {
                   placeholder="John Doe"
                 />
               </div>
-              
+
               <div>
                 <label htmlFor="rating" className="block text-sm font-medium text-gray-300 mb-1">
                   Rating
                 </label>
                 {renderRatingInput()}
               </div>
-              
+
               <div>
                 <label htmlFor="review" className="block text-sm font-medium text-gray-300 mb-1">
                   Your Review
@@ -179,7 +161,7 @@ const ReviewsSection: React.FC = () => {
                   placeholder="Share your experience working with us..."
                 ></textarea>
               </div>
-              
+
               <button
                 type="submit"
                 className="w-full neon-button"
@@ -194,7 +176,7 @@ const ReviewsSection: React.FC = () => {
           <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
             {isLoading ? (
               <div className="text-center py-10">
-                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neon border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neon border-r-transparent"></div>
                 <p className="mt-4 text-gray-400">Loading reviews...</p>
               </div>
             ) : reviews.length > 0 ? (
