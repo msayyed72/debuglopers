@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { 
@@ -6,11 +5,11 @@ import {
   Layers, 
   Lightbulb, 
   LayoutDashboard, 
-  Cube, 
+  Box, 
   Palette, 
   Search, 
   Star, 
-  Robot 
+  Bot 
 } from "lucide-react";
 
 const services = [
@@ -18,7 +17,7 @@ const services = [
     id: 1,
     title: "3D Web Development",
     description: "Create immersive 3D experiences that captivate users and increase engagement by 70%",
-    icon: <Cube className="text-neon" size={32} />,
+    icon: <Box className="text-neon" size={32} />,
     metric: "70% higher engagement rates"
   },
   {
@@ -32,7 +31,7 @@ const services = [
     id: 3,
     title: "AI Tool Development",
     description: "Leverage artificial intelligence to create intelligent solutions that automate processes",
-    icon: <Robot className="text-neon" size={32} />,
+    icon: <Bot className="text-neon" size={32} />,
     metric: "80% reduction in manual tasks"
   },
   {
