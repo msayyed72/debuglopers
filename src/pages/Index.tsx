@@ -10,9 +10,6 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
-// Let's install the required dependencies
-// npm install framer-motion react-vertical-timeline-component three
-
 const Index = () => {
   useEffect(() => {
     // Update document title
