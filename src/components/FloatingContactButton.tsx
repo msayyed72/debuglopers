@@ -20,14 +20,14 @@ const FloatingContactButton: React.FC = () => {
             className="flex flex-col gap-3 mb-4"
           >
             <a
-              href="mailto:contact@debuglopers.com"
+              href="mailto:debuglopers@gmail.com"
               className="w-12 h-12 rounded-full bg-snow flex items-center justify-center text-jet hover:bg-neon transition-colors shadow-lg"
               aria-label="Email us"
             >
               <Mail size={20} />
             </a>
             <a
-              href="https://wa.me/1234567890" 
+              href="https://wa.me/8108561069" 
               target="_blank"
               rel="noopener noreferrer"
               className="w-12 h-12 rounded-full bg-snow flex items-center justify-center text-jet hover:bg-neon transition-colors shadow-lg"
