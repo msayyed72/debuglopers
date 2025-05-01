@@ -17,7 +17,7 @@ const founderData = [
     name: "Shaikh Mohammed Saud",
     title: "Design Wizard & UX Strategist",
     mission: "Crafting experiences that inspire and engage",
-    image: "/lovable-uploads/e4d47b62-e070-4b8e-ab49-742e2387678c.png",
+    image: "/lovable-uploads/f7c59a27-abbc-450a-9bbc-98c0d46706f8.png",
     skills: ["UI/UX Design", "Brand Strategy", "Motion Design"],
     linkedin: "https://www.linkedin.com/",
     github: "https://github.com/"
