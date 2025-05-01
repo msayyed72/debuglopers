@@ -1,41 +1,52 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, StarHalf, StarOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-// Sample reviews data
-const initialReviews = [
-  {
-    id: 1,
-    name: "Alex Thompson",
-    review: "Working with Debuglopers was a game-changer for our business. Their technical expertise and creative approach delivered a product that exceeded our expectations.",
-    rating: 5,
-    date: "2025-04-15"
-  },
-  {
-    id: 2,
-    name: "Sarah Chen",
-    review: "The dashboard they built for us has streamlined our operations and provided invaluable insights. Highly professional team with exceptional communication.",
-    rating: 4.5,
-    date: "2025-03-22"
-  },
-  {
-    id: 3,
-    name: "Michael Rodriguez",
-    review: "Their AI solution saved us countless hours of manual work. The attention to detail and user experience design sets them apart from other agencies.",
-    rating: 5,
-    date: "2025-02-10"
-  }
-];
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getReviews, submitReview, type Review } from "@/services/reviewService";
 
 const ReviewsSection: React.FC = () => {
-  const [reviews, setReviews] = useState(initialReviews);
   const [name, setName] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(5);
   const [hoveredRating, setHoveredRating] = useState(0);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Fetch reviews from Supabase
+  const { data: reviews = [], isLoading } = useQuery({
+    queryKey: ['reviews'],
+    queryFn: getReviews
+  });
+
+  // Mutation for submitting reviews
+  const submitReviewMutation = useMutation({
+    mutationFn: submitReview,
+    onSuccess: () => {
+      // Reset form
+      setName("");
+      setReviewText("");
+      setRating(5);
+      
+      // Show success message
+      toast({
+        title: "Thank you for your review!",
+        description: "Your feedback has been submitted and will be displayed after approval.",
+      });
+      
+      // Invalidate query to refresh data
+      queryClient.invalidateQueries({ queryKey: ['reviews'] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "There was a problem submitting your review. Please try again.",
+        variant: "destructive"
+      });
+      console.error("Error submitting review:", error);
+    }
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,23 +60,10 @@ const ReviewsSection: React.FC = () => {
       return;
     }
     
-    // In a real application, this would send data to Supabase or another backend
-    const newReview = {
-      id: reviews.length + 1,
+    submitReviewMutation.mutate({
       name,
       review: reviewText,
-      rating,
-      date: new Date().toISOString().split("T")[0]
-    };
-    
-    setReviews([newReview, ...reviews]);
-    setName("");
-    setReviewText("");
-    setRating(5);
-    
-    toast({
-      title: "Thank you for your review!",
-      description: "Your feedback has been submitted successfully.",
+      rating
     });
   };
 
@@ -114,8 +112,13 @@ const ReviewsSection: React.FC = () => {
   };
 
   return (
-    <section id="reviews" className="section-padding bg-gradient-to-b from-black to-jet">
-      <div className="container mx-auto">
+    <section id="reviews" className="section-padding bg-gradient-to-b from-black to-jet relative overflow-hidden">
+      {/* 3D Background Elements - Animated Particles */}
+      <div className="absolute inset-0 z-0 opacity-20">
+        <canvas id="reviewsParticles" className="w-full h-full"></canvas>
+      </div>
+
+      <div className="container mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -180,38 +183,55 @@ const ReviewsSection: React.FC = () => {
               <button
                 type="submit"
                 className="w-full neon-button"
+                disabled={submitReviewMutation.isPending}
               >
-                Submit Review
+                {submitReviewMutation.isPending ? "Submitting..." : "Submit Review"}
               </button>
             </form>
           </motion.div>
 
           {/* Reviews Display */}
           <div className="space-y-6 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-            {reviews.map((review, index) => (
-              <motion.div
-                key={review.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-20px" }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="glow-card p-6"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <div className="flex items-center mb-1">
-                      <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-sm font-medium mr-3">
-                        {review.name.slice(0, 1)}
+            {isLoading ? (
+              <div className="text-center py-10">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-neon border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"></div>
+                <p className="mt-4 text-gray-400">Loading reviews...</p>
+              </div>
+            ) : reviews.length > 0 ? (
+              reviews.map((review: Review, index: number) => (
+                <motion.div
+                  key={review.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-20px" }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="glow-card p-6"
+                >
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <div className="flex items-center mb-1">
+                        <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-sm font-medium mr-3">
+                          {review.name.slice(0, 1)}
+                        </div>
+                        <h4 className="font-medium">{review.name}</h4>
                       </div>
-                      <h4 className="font-medium">{review.name}</h4>
+                      <div className="flex">{renderStars(review.rating)}</div>
                     </div>
-                    <div className="flex">{renderStars(review.rating)}</div>
+                    <span className="text-xs text-gray-400">{new Date(review.date || "").toLocaleDateString()}</span>
                   </div>
-                  <span className="text-xs text-gray-400">{review.date}</span>
-                </div>
-                <p className="text-gray-300 text-sm">{review.review}</p>
+                  <p className="text-gray-300 text-sm">{review.review}</p>
+                </motion.div>
+              ))
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-center py-10 glow-card"
+              >
+                <p className="text-gray-400">No reviews yet. Be the first to leave a review!</p>
               </motion.div>
-            ))}
+            )}
           </div>
         </div>
       </div>

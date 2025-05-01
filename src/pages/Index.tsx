@@ -11,6 +11,8 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
 import FloatingContactButton from "@/components/FloatingContactButton";
 import Footer from "@/components/Footer";
+import ReviewsParticles from "@/components/3d/ReviewsParticles";
+import { Suspense } from "react";
 
 const Index = () => {
   useEffect(() => {
@@ -27,7 +29,14 @@ const Index = () => {
       <ServicesSection />
       <CaseStudiesSection />
       <IndustriesSection />
-      <ReviewsSection />
+      <div className="relative">
+        <div className="absolute inset-0 z-0">
+          <Suspense fallback={<div></div>}>
+            <ReviewsParticles />
+          </Suspense>
+        </div>
+        <ReviewsSection />
+      </div>
       <ContactSection />
       <FloatingContactButton />
       <Footer />

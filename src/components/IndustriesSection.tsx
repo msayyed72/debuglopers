@@ -9,6 +9,9 @@ import {
   Users, 
   Heart 
 } from "lucide-react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import IndustryModel from "./3d/IndustryModel";
 
 const industries = [
   {
@@ -16,49 +19,84 @@ const industries = [
     name: "Personal Portfolios",
     description: "Stand-out digital presences for professionals, artists, and creators",
     icon: <Briefcase className="text-neon" size={32} />,
-    clients: "25+ clients"
+    clients: "25+ clients",
+    color: "#c2ff00"
   },
   {
     id: 2,
     name: "Educational Tech",
     description: "Interactive learning platforms and tools for modern education",
     icon: <GraduationCap className="text-neon" size={32} />,
-    clients: "10+ institutions"
+    clients: "10+ institutions",
+    color: "#00c2ff"
   },
   {
     id: 3,
     name: "E-commerce",
     description: "Converting online stores with seamless user experiences",
     icon: <ShoppingBag className="text-neon" size={32} />,
-    clients: "15+ shops"
+    clients: "15+ shops",
+    color: "#ff00c2"
   },
   {
     id: 4,
     name: "SaaS Platforms",
     description: "Scalable software solutions with powerful user interfaces",
     icon: <Layers className="text-neon" size={32} />,
-    clients: "8+ platforms"
+    clients: "8+ platforms",
+    color: "#c200ff"
   },
   {
     id: 5,
     name: "Creative Agencies",
     description: "Digital tools that empower other creative professionals",
     icon: <Users className="text-neon" size={32} />,
-    clients: "12+ agencies"
+    clients: "12+ agencies",
+    color: "#ffc200"
   },
   {
     id: 6,
     name: "NGOs & Foundations",
     description: "Impactful digital presences for organizations making a difference",
     icon: <Heart className="text-neon" size={32} />,
-    clients: "6+ foundations"
+    clients: "6+ foundations",
+    color: "#00ff8c"
   }
 ];
 
 const IndustriesSection: React.FC = () => {
   return (
-    <section id="industries" className="section-padding bg-gradient-to-b from-black to-jet">
-      <div className="container mx-auto">
+    <section id="industries" className="section-padding bg-gradient-to-b from-black to-jet relative">
+      <div className="absolute w-full h-full top-0 left-0 z-0 opacity-40">
+        <Canvas>
+          <PerspectiveCamera makeDefault position={[0, 0, 15]} />
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[10, 10, 5]} intensity={1} />
+          <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#c2ff00" />
+          
+          {industries.map((industry, i) => (
+            <IndustryModel 
+              key={industry.id}
+              position={[
+                (i % 3) * 6 - 6, 
+                Math.floor(i / 3) * -4 + 2,
+                0
+              ]}
+              scale={0.7}
+              color={industry.color}
+            />
+          ))}
+          
+          <OrbitControls 
+            enableZoom={false} 
+            enablePan={false} 
+            autoRotate 
+            autoRotateSpeed={0.5} 
+          />
+        </Canvas>
+      </div>
+
+      <div className="container mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -87,7 +125,7 @@ const IndustriesSection: React.FC = () => {
                 y: -10,
                 transition: { duration: 0.3 } 
               }}
-              className="gradient-border p-8 hover:animate-glow relative group"
+              className="gradient-border p-8 hover:animate-glow relative group backdrop-blur-sm bg-black/30"
             >
               <div className="flex flex-col items-center text-center">
                 <div className="mb-6">{industry.icon}</div>
