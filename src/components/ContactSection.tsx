@@ -87,7 +87,7 @@ const ContactSection: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full p-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-neon focus:border-transparent transition-colors"
-                  placeholder="john@example.com"
+                  placeholder="debuglopers@gmail.com"
                 />
               </div>
               
@@ -131,7 +131,7 @@ const ContactSection: React.FC = () => {
                   <div>
                     <p className="font-medium">Email Us</p>
                     <a href="mailto:contact@debuglopers.com" className="text-gray-300 hover:text-neon transition-colors">
-                      contact@debuglopers.com
+                      debuglopers@gmail.com
                     </a>
                   </div>
                 </div>
@@ -141,7 +141,7 @@ const ContactSection: React.FC = () => {
                   <div>
                     <p className="font-medium">Call Us</p>
                     <a href="tel:+1234567890" className="text-gray-300 hover:text-neon transition-colors">
-                      +1 (234) 567-890
+                      +91-8108561069 | +91-9702019585
                     </a>
                   </div>
                 </div>
