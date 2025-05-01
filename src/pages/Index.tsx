@@ -4,10 +4,12 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutFounders from "@/components/AboutFounders";
 import JourneyTimeline from "@/components/JourneyTimeline";
-import ProjectsShowcase from "@/components/ProjectsShowcase";
+import CaseStudiesSection from "@/components/CaseStudiesSection";
 import ServicesSection from "@/components/ServicesSection";
+import IndustriesSection from "@/components/IndustriesSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
+import FloatingContactButton from "@/components/FloatingContactButton";
 import Footer from "@/components/Footer";
 
 const Index = () => {
@@ -22,10 +24,12 @@ const Index = () => {
       <HeroSection />
       <AboutFounders />
       <JourneyTimeline />
-      <ProjectsShowcase />
       <ServicesSection />
+      <CaseStudiesSection />
+      <IndustriesSection />
       <ReviewsSection />
       <ContactSection />
+      <FloatingContactButton />
       <Footer />
     </div>
   );
