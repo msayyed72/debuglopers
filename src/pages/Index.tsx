@@ -14,6 +14,7 @@ import Footer from "@/components/Footer";
 import { Suspense } from "react";
 import ImmersiveBackground from "@/components/3d/ImmersiveBackground";
 import { Toaster } from "@/components/ui/toaster";
+import ProjectsShowcase from "@/components/ProjectsShowcase";
 
 const Index = () => {
   useEffect(() => {
@@ -28,6 +29,7 @@ const Index = () => {
       <AboutFounders />
       <JourneyTimeline />
       <ServicesSection />
+      <ProjectsShowcase />
       <CaseStudiesSection />
       <IndustriesSection />
       <div className="relative">
