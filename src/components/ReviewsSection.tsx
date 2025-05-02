@@ -1,21 +1,26 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, StarHalf, StarOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getReviews, submitReview, type Review } from "@/services/reviewService";
+import ReviewsParticles from "./3d/ReviewsParticles";
 
 const ReviewsSection: React.FC = () => {
   const [name, setName] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(5);
   const [hoveredRating, setHoveredRating] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: reviews = [], isLoading } = useQuery({
     queryKey: ['reviews'],
-    queryFn: getReviews
+    queryFn: getReviews,
+    staleTime: 60000, // Cache for 1 minute
+    refetchOnWindowFocus: false
   });
 
   const submitReviewMutation = useMutation({
@@ -24,13 +29,16 @@ const ReviewsSection: React.FC = () => {
       setName("");
       setReviewText("");
       setRating(5);
+      setIsSubmitting(false);
       toast({
         title: "Thank you for your review!",
         description: "Your feedback has been submitted and will be displayed after approval.",
       });
       queryClient.invalidateQueries({ queryKey: ['reviews'] });
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Error submitting review:", error);
+      setIsSubmitting(false);
       toast({
         title: "Error",
         description: "There was a problem submitting your review. Please try again.",
@@ -39,7 +47,7 @@ const ReviewsSection: React.FC = () => {
     }
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !reviewText) {
       toast({
@@ -50,6 +58,8 @@ const ReviewsSection: React.FC = () => {
       return;
     }
 
+    setIsSubmitting(true);
+    console.log("Submitting review:", { name, review: reviewText, rating });
     submitReviewMutation.mutate({ name, review: reviewText, rating });
   };
 
@@ -97,7 +107,7 @@ const ReviewsSection: React.FC = () => {
   return (
     <section id="reviews" className="section-padding bg-gradient-to-b from-black to-jet relative overflow-hidden">
       <div className="absolute inset-0 z-0 opacity-20">
-        <canvas id="reviewsParticles" className="w-full h-full"></canvas>
+        <ReviewsParticles />
       </div>
 
       <div className="container mx-auto relative z-10">
@@ -165,9 +175,15 @@ const ReviewsSection: React.FC = () => {
               <button
                 type="submit"
                 className="w-full neon-button"
-                disabled={submitReviewMutation.isPending}
+                disabled={isSubmitting}
               >
-                {submitReviewMutation.isPending ? "Submitting..." : "Submit Review"}
+                {isSubmitting ? 
+                  <span className="flex items-center justify-center">
+                    <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent mr-2"></span>
+                    Submitting...
+                  </span> : 
+                  "Submit Review"
+                }
               </button>
             </form>
           </motion.div>
@@ -182,7 +198,7 @@ const ReviewsSection: React.FC = () => {
             ) : reviews.length > 0 ? (
               reviews.map((review: Review, index: number) => (
                 <motion.div
-                  key={review.id}
+                  key={review.id || index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-20px" }}
@@ -200,7 +216,9 @@ const ReviewsSection: React.FC = () => {
                       </div>
                       <div className="flex">{renderStars(review.rating)}</div>
                     </div>
-                    <span className="text-xs text-gray-400">{new Date(review.date || "").toLocaleDateString()}</span>
+                    <span className="text-xs text-gray-400">
+                      {review.date ? new Date(review.date).toLocaleDateString() : 'Recent'}
+                    </span>
                   </div>
                   <p className="text-gray-300 text-sm">{review.review}</p>
                 </motion.div>

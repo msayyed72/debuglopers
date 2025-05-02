@@ -1,8 +1,7 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import Logo from "./Logo";
-import { ArrowUp, Instagram, Linkedin, Github, Cube } from "lucide-react";
+import { ArrowUp, Instagram, Linkedin, Github, Code } from "lucide-react";
 import ImmersiveBackground from "./3d/ImmersiveBackground";
 
 const Footer: React.FC = () => {
@@ -56,7 +55,7 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <h3 className="text-lg font-bold mb-4 flex items-center">
-              <Cube size={18} className="mr-2 text-neon" /> Debuglopers
+              <Code size={18} className="mr-2 text-neon" /> Debuglopers
             </h3>
             <p className="text-gray-400 text-sm">
               A bold and modern digital company delivering cutting-edge solutions with precision and creativity.

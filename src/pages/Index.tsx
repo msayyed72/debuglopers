@@ -13,6 +13,7 @@ import FloatingContactButton from "@/components/FloatingContactButton";
 import Footer from "@/components/Footer";
 import { Suspense } from "react";
 import ImmersiveBackground from "@/components/3d/ImmersiveBackground";
+import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   useEffect(() => {
@@ -40,6 +41,7 @@ const Index = () => {
       <ContactSection />
       <FloatingContactButton />
       <Footer />
+      <Toaster />
     </div>
   );
 };
