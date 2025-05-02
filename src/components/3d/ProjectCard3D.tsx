@@ -105,7 +105,6 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
             url={project.image} 
             position={[0, 0, 0.01]} 
             scale={[2.2, 1.2, 1]} 
-            transparent={true}
           />
         </group>
         
