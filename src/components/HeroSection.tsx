@@ -1,122 +1,23 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
+import { Suspense } from "react";
 import Logo from "./Logo";
+import HeroCanvas from "./3d/HeroCanvas";
+import ImmersiveBackground from "./3d/ImmersiveBackground";
 
 const HeroSection: React.FC = () => {
   const [text, setText] = useState("");
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(100);
-  const mountRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number>();
-  const sceneRef = useRef<THREE.Scene>();
-  const cameraRef = useRef<THREE.PerspectiveCamera>();
-  const rendererRef = useRef<THREE.WebGLRenderer>();
   
   const phrases = [
     "We Build Tools.",
     "We Build Brands.",
     "We Build the Future."
   ];
-  
-  // Set up the THREE.js scene
-  useEffect(() => {
-    if (!mountRef.current) return;
-    
-    // Create scene, camera, and renderer
-    const scene = new THREE.Scene();
-    sceneRef.current = scene;
-    
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    camera.position.z = 5;
-    cameraRef.current = camera;
-    
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    mountRef.current.appendChild(renderer.domElement);
-    rendererRef.current = renderer;
-    
-    // Create particles
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 1000;
-    const posArray = new Float32Array(particlesCount * 3);
-    
-    for (let i = 0; i < particlesCount * 3; i++) {
-      posArray[i] = (Math.random() - 0.5) * 10;
-    }
-    
-    particlesGeometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(posArray, 3)
-    );
-    
-    const particlesMaterial = new THREE.PointsMaterial({
-      size: 0.02,
-      color: new THREE.Color("#c2ff00"),
-      transparent: true,
-      opacity: 0.8,
-    });
-    
-    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particlesMesh);
-    
-    // Create wireframe sphere for logo background
-    const sphereGeometry = new THREE.SphereGeometry(1.5, 24, 24);
-    const sphereMaterial = new THREE.MeshBasicMaterial({
-      color: 0x1A73E8,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.3,
-    });
-    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-    scene.add(sphere);
-    
-    // Animation loop
-    const animate = () => {
-      particlesMesh.rotation.x += 0.001;
-      particlesMesh.rotation.y += 0.001;
-      
-      sphere.rotation.y += 0.003;
-      sphere.rotation.x += 0.001;
-      
-      renderer.render(scene, camera);
-      animationRef.current = requestAnimationFrame(animate);
-    };
-    
-    animate();
-    
-    // Handle window resize
-    const handleResize = () => {
-      if (!camera || !renderer) return;
-      
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-    
-    window.addEventListener("resize", handleResize);
-    
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      if (rendererRef.current && mountRef.current) {
-        mountRef.current.removeChild(rendererRef.current.domElement);
-      }
-    };
-  }, []);
   
   // Typewriter effect
   useEffect(() => {
@@ -148,8 +49,19 @@ const HeroSection: React.FC = () => {
   
   return (
     <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* THREE.js canvas container */}
-      <div ref={mountRef} className="absolute inset-0"></div>
+      {/* 3D Background */}
+      <ImmersiveBackground 
+        color="#c2ff00"
+        density={1200}
+        speed={0.0003}
+      />
+      
+      {/* 3D Logo */}
+      <div className="absolute inset-0 z-0">
+        <Suspense fallback={null}>
+          <HeroCanvas />
+        </Suspense>
+      </div>
       
       {/* Content overlay */}
       <div className="relative z-10 text-center mx-auto px-4 max-w-5xl">

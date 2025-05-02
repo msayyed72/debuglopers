@@ -11,8 +11,8 @@ import ReviewsSection from "@/components/ReviewsSection";
 import ContactSection from "@/components/ContactSection";
 import FloatingContactButton from "@/components/FloatingContactButton";
 import Footer from "@/components/Footer";
-import ReviewsParticles from "@/components/3d/ReviewsParticles";
 import { Suspense } from "react";
+import ImmersiveBackground from "@/components/3d/ImmersiveBackground";
 
 const Index = () => {
   useEffect(() => {
@@ -32,7 +32,7 @@ const Index = () => {
       <div className="relative">
         <div className="absolute inset-0 z-0">
           <Suspense fallback={<div></div>}>
-            <ReviewsParticles />
+            <ImmersiveBackground color="#c2ff00" density={1000} speed={0.0002} />
           </Suspense>
         </div>
         <ReviewsSection />
