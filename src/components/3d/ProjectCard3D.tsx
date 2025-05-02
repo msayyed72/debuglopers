@@ -83,7 +83,7 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
         onPointerOut={() => setHovered(false)}
         onClick={handleClick}
       >
-        {/* Card background */}
+        {/* Card background with enhanced glow effect */}
         <mesh position={[0, 0, -0.05]} castShadow receiveShadow>
           <boxGeometry args={[2.5, 1.8, 0.1]} />
           <meshStandardMaterial 
@@ -91,7 +91,7 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
             roughness={0.2}
             metalness={0.8}
             emissive={project.color}
-            emissiveIntensity={isHovered ? 0.5 : 0.2}
+            emissiveIntensity={isHovered ? 0.7 : 0.3}
           />
         </mesh>
         
@@ -108,7 +108,7 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
           />
         </group>
         
-        {/* Project title */}
+        {/* Project title with enhanced visibility */}
         <Text
           position={[0, -0.6, 0.1]}
           fontSize={0.15}
@@ -116,11 +116,13 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
           textAlign="center"
           font="/fonts/inter_bold.json"
           color="white"
+          outlineColor="black"
+          outlineWidth={0.005}
         >
           {project.title}
         </Text>
         
-        {/* Category badge */}
+        {/* Category badge with improved contrast */}
         <Text
           position={[0, -0.8, 0.1]}
           fontSize={0.08}
@@ -128,24 +130,29 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
           textAlign="center"
           font="/fonts/inter_bold.json"
           color={project.color}
+          outlineColor="black"
+          outlineWidth={0.002}
         >
           {project.category}
         </Text>
         
-        {/* "NEW" badge if applicable */}
+        {/* "NEW" badge if applicable, with enhanced visibility */}
         {project.isNew && (
-          <mesh position={[0.9, 0.8, 0.1]}>
-            <circleGeometry args={[0.15, 32]} />
-            <meshBasicMaterial color={project.color} />
+          <group position={[0.9, 0.8, 0.1]}>
+            <mesh>
+              <circleGeometry args={[0.15, 32]} />
+              <meshBasicMaterial color={project.color} />
+            </mesh>
             <Text
               position={[0, 0, 0.01]}
               fontSize={0.08}
               font="/fonts/inter_bold.json"
               color="black"
+              fontWeight="bold"
             >
               NEW
             </Text>
-          </mesh>
+          </group>
         )}
       </group>
     </Float>
