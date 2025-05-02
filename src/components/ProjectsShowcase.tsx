@@ -1,7 +1,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Github, ExternalLink, Code, Cube as CubeIcon } from "lucide-react";
+import { Github, ExternalLink, Code, Boxes } from "lucide-react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment, Float, Text } from "@react-three/drei";
 import * as THREE from "three";
@@ -145,7 +145,7 @@ const ProjectsShowcase: React.FC = () => {
                 : "bg-gray-800/50 text-gray-300 hover:bg-gray-800 hover:text-white"
             }`}
           >
-            <CubeIcon size={16} />
+            <Boxes size={16} />
             <span>3D View</span>
           </button>
           <button
