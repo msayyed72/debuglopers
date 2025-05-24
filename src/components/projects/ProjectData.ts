@@ -1,19 +1,8 @@
 
 import { Star, Github, ExternalLink, Code, Boxes } from "lucide-react";
+import { Project } from "../3d/ProjectCard3DTypes";
 
-export type Project = {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  category: string;
-  technologies: string[];
-  github: string;
-  live: string;
-  isNew?: boolean;
-  color: string;
-  featured: boolean;
-};
+export type { Project } from "../3d/ProjectCard3DTypes";
 
 export type ViewMode = "3d" | "grid" | "featured";
 

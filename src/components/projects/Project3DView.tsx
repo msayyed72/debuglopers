@@ -2,9 +2,9 @@
 import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Environment, Stars, Float } from "@react-three/drei";
+import { OrbitControls, Environment, Stars } from "@react-three/drei";
 import ProjectCard3D from "../3d/ProjectCard3D";
-import { Project } from "./ProjectData";
+import { Project } from "../3d/ProjectCard3DTypes";
 
 type Project3DViewProps = {
   projects: Project[];
@@ -69,7 +69,6 @@ const Project3DView: React.FC<Project3DViewProps> = ({
         />
       </Canvas>
       
-      {/* Overlay instructions */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black/70 backdrop-blur-md px-6 py-3 rounded-full">
         <p className="text-sm text-gray-300">Drag to rotate • Scroll to zoom • Click to view details</p>
       </div>
