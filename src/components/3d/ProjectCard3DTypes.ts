@@ -9,6 +9,7 @@ export type Project = {
   github: string;
   live: string;
   isNew?: boolean;
+  featured?: boolean;
   color: string;
 };
 
