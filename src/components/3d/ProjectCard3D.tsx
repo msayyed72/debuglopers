@@ -45,7 +45,7 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
   
   useCursor(isHovered);
   
-  useFrame((state, delta) => {
+  useFrame((_state, _delta) => {
     if (!ref.current) return;
     
     // Rotate slightly to face the camera
