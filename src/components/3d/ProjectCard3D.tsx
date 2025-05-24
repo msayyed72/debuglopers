@@ -162,7 +162,7 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
         {project.isNew && (
           <group position={[0.9, 0.8, 0.1]}>
             <mesh>
-              <circleGeometry args={[0.18, 32]} />
+              <circleGeometry args={[0.18]} />
               <meshBasicMaterial 
                 color={project.color}
                 transparent
@@ -170,7 +170,7 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
               />
             </mesh>
             <mesh>
-              <circleGeometry args={[0.15, 32]} />
+              <circleGeometry args={[0.15]} />
               <meshBasicMaterial 
                 color="black"
                 transparent
@@ -199,7 +199,7 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
               (Math.random() - 0.5) * 0.5
             ]}
           >
-            <sphereGeometry args={[0.02, 8, 8]} />
+            <sphereGeometry args={[0.02]} />
             <meshBasicMaterial 
               color={project.color}
               transparent
