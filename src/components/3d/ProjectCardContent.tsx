@@ -63,7 +63,6 @@ const ProjectCardContent: React.FC<ProjectCardContentProps> = ({
         font="/fonts/inter_bold.json"
         color="white"
         outlineColor={project.color}
-        outlineWidth={0.008}
       >
         {project.title}
       </Text>
@@ -77,7 +76,6 @@ const ProjectCardContent: React.FC<ProjectCardContentProps> = ({
         font="/fonts/inter_bold.json"
         color={project.color}
         outlineColor="black"
-        outlineWidth={0.003}
       >
         {project.category}
       </Text>
