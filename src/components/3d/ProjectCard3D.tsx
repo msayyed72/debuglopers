@@ -83,19 +83,31 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
         onPointerOut={() => setHovered(false)}
         onClick={handleClick}
       >
-        {/* Card background with enhanced glow effect */}
+        {/* Enhanced holographic card background */}
         <mesh position={[0, 0, -0.05]} castShadow receiveShadow>
           <boxGeometry args={[2.5, 1.8, 0.1]} />
           <meshStandardMaterial 
             color="black" 
-            roughness={0.2}
-            metalness={0.8}
+            roughness={0.1}
+            metalness={0.9}
             emissive={project.color}
-            emissiveIntensity={isHovered ? 0.7 : 0.3}
+            emissiveIntensity={isHovered ? 0.8 : 0.4}
+            transparent
+            opacity={0.95}
           />
         </mesh>
         
-        {/* Project image */}
+        {/* Glowing border effect */}
+        <mesh position={[0, 0, -0.04]} castShadow>
+          <boxGeometry args={[2.6, 1.9, 0.02]} />
+          <meshBasicMaterial 
+            color={project.color}
+            transparent
+            opacity={isHovered ? 0.6 : 0.3}
+          />
+        </mesh>
+        
+        {/* Project image with enhanced effects */}
         <group position={[0, 0.25, 0]}>
           <mesh ref={imageRef} castShadow>
             <planeGeometry args={[2.2, 1.2]} />
@@ -104,25 +116,35 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
           <Image 
             url={project.image} 
             position={[0, 0, 0.01]} 
-            scale={[2.2, 1.2, 1]} 
+            scale={[2.2, 1.2, 1]}
           />
+          
+          {/* Image overlay for hover effect */}
+          <mesh position={[0, 0, 0.02]}>
+            <planeGeometry args={[2.2, 1.2]} />
+            <meshBasicMaterial 
+              color={project.color}
+              transparent
+              opacity={isHovered ? 0.2 : 0}
+            />
+          </mesh>
         </group>
         
-        {/* Project title with enhanced visibility */}
+        {/* Enhanced project title with 3D effect */}
         <Text
           position={[0, -0.6, 0.1]}
-          fontSize={0.15}
+          fontSize={0.16}
           maxWidth={2}
           textAlign="center"
           font="/fonts/inter_bold.json"
           color="white"
-          outlineColor="black"
-          outlineWidth={0.005}
+          outlineColor={project.color}
+          outlineWidth={0.008}
         >
           {project.title}
         </Text>
         
-        {/* Category badge with improved contrast */}
+        {/* Glowing category badge */}
         <Text
           position={[0, -0.8, 0.1]}
           fontSize={0.08}
@@ -131,29 +153,60 @@ const ProjectCard3D: React.FC<ProjectCard3DProps> = ({
           font="/fonts/inter_bold.json"
           color={project.color}
           outlineColor="black"
-          outlineWidth={0.002}
+          outlineWidth={0.003}
         >
           {project.category}
         </Text>
         
-        {/* "NEW" badge if applicable, with enhanced visibility */}
+        {/* Enhanced "NEW" badge with pulsing effect */}
         {project.isNew && (
           <group position={[0.9, 0.8, 0.1]}>
             <mesh>
+              <circleGeometry args={[0.18, 32]} />
+              <meshBasicMaterial 
+                color={project.color}
+                transparent
+                opacity={0.9}
+              />
+            </mesh>
+            <mesh>
               <circleGeometry args={[0.15, 32]} />
-              <meshBasicMaterial color={project.color} />
+              <meshBasicMaterial 
+                color="black"
+                transparent
+                opacity={0.8}
+              />
             </mesh>
             <Text
               position={[0, 0, 0.01]}
               fontSize={0.08}
               font="/fonts/inter_bold.json"
-              color="black"
+              color={project.color}
               fontWeight="bold"
             >
               NEW
             </Text>
           </group>
         )}
+        
+        {/* Floating particles around the card */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <mesh
+            key={i}
+            position={[
+              (Math.random() - 0.5) * 3,
+              (Math.random() - 0.5) * 2,
+              (Math.random() - 0.5) * 0.5
+            ]}
+          >
+            <sphereGeometry args={[0.02, 8, 8]} />
+            <meshBasicMaterial 
+              color={project.color}
+              transparent
+              opacity={isHovered ? 0.8 : 0.4}
+            />
+          </mesh>
+        ))}
       </group>
     </Float>
   );
