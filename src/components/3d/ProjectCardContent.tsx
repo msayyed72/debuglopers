@@ -84,7 +84,7 @@ const ProjectCardContent: React.FC<ProjectCardContentProps> = ({
       {project.isNew && (
         <group position={[0.9, 0.8, 0.1]}>
           <mesh>
-            <circleGeometry args={[0.18, 32]} />
+            <circleGeometry args={[0.18]} />
             <meshBasicMaterial 
               color={project.color}
               transparent
@@ -92,7 +92,7 @@ const ProjectCardContent: React.FC<ProjectCardContentProps> = ({
             />
           </mesh>
           <mesh>
-            <circleGeometry args={[0.15, 32]} />
+            <circleGeometry args={[0.15]} />
             <meshBasicMaterial 
               color="black"
               transparent
